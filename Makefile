@@ -1,4 +1,4 @@
-TARGET = main
+TARGET = sha256
 
 CC = gcc
 CFLAGS = -Wall
