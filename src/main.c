@@ -1,5 +1,8 @@
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include "functions.h"
+#include "constants.h"
 
 int main(int argc, char** argv) {
     
@@ -8,11 +11,17 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    // Conversion to bytes
-    char* input = argv[0];
+    char* message = argv[1];
+    size_t message_size = strlen(message) * 8;
 
-    // Padding and blocks
-    
+    // Create a buffer
+    size_t buffer_size = 512 * ((message_size + 65) / 512 + 1);
+    void* buffer = malloc(buffer_size);
+
+    // Add padding and size
+
+    // Split in 512-bits message blocks
+
     // Message schedule
     
     // Compression
@@ -20,5 +29,6 @@ int main(int argc, char** argv) {
     // Final hash value
     printf("This is a work in progress\n");
     
+    free(buffer);
     return 0;
 }
