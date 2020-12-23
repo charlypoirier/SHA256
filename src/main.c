@@ -8,8 +8,17 @@ int main(int argc, char** argv) {
         return 1;
     }
 
+    // Conversion to bytes
     char* input = argv[0];
-    // TODO: Hash the input string
+
+    // Padding and blocks
+    
+    // Message schedule
+    
+    // Compression
+
+    // Final hash value
+    printf("This is a work in progress\n");
     
     return 0;
 }
