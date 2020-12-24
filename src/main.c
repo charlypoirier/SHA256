@@ -15,7 +15,7 @@ int main(int argc, char** argv) {
     size_t message_size = strlen(message) * 8;
 
     // Create a buffer
-    size_t buffer_size = 512 * ((message_size + 65) / 512 + 1); printf("%lu\n\n", buffer_size);
+    size_t buffer_size = 512 * ((message_size + 65) / 512 + 1);
     void* buffer = malloc(buffer_size);
 
     // Fill it with message (TODO: padding and size)
