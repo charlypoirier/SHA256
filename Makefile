@@ -8,12 +8,11 @@ LFLAGS = -Wall
 
 SRCDIR = src
 OBJDIR = build
-BINDIR = bin
 
 SOURCES := $(wildcard $(SRCDIR)/*.c)
 OBJECTS := $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
-$(BINDIR)/$(TARGET): $(OBJECTS)
+$(TARGET): $(OBJECTS)
 	$(LINKER) $(OBJECTS) $(LFLAGS) -o $@
 
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
