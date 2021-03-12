@@ -4,34 +4,32 @@
 #include "functions.h"
 #include "constants.h"
 
+/**
+ * See https://en.wikipedia.org/wiki/SHA-2
+ */
 int main(int argc, char** argv) {
     
     if (argc == 1) {
         printf("Usage: ./bin/sha256 <input>\n");
-        return 1;
+        return EXIT_FAILURE;
     }
 
     char* message = argv[1];
-    size_t message_size = strlen(message) * 8;
+    size_t length = strlen(message) * 8;
 
-    // Create a buffer
-    size_t buffer_size = 512 * ((message_size + 65) / 512 + 1);
-    void* buffer = malloc(buffer_size);
+    // Hash values
+    uint32_t h[] = { 0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
+        0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19 };
 
-    // Fill it with message (TODO: padding and size)
-    memcpy(buffer, message, message_size);
-    // fwrite(buffer, 1, buffer_size, stdout);
-    // printf("\n\n");
+    ///////////
+    // To do //
+    ///////////
 
-    // Split in 512-bits message blocks
-
-    // Message schedule
+    // Final digest
+    for (int i=0; i<8; ++i) {
+        printf("%08x", h[i]);
+	}
+    printf("\n");
     
-    // Compression
-
-    // Final hash value
-    printf("This is a work in progress\n");
-    
-    free(buffer);
-    return 0;
+    return EXIT_SUCCESS;
 }
