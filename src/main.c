@@ -6,7 +6,6 @@
 
 /**
  * See https://en.wikipedia.org/wiki/SHA-2
- * and https://github.com/amosnier/sha-2/blob/master/sha-256.c
  */
 int main(int argc, char** argv) {
     
@@ -16,7 +15,7 @@ int main(int argc, char** argv) {
     }
 
     char* input = argv[1];
-    size_t len = strlen(input) * 8;
+    int len = strlen(input) * 8;
 
     // Pre-processing
     
