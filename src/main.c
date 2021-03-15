@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
         data = data + n;
 
         // Padding
-        if (64 - n > 0) {
+        if (n < 64) {
             chunk[n] = 0b10000000;
             for (int i=n+1; i<64; ++i) {
                 chunk[i] = 0b00000000;
