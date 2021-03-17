@@ -26,8 +26,10 @@ int main(int argc, char** argv) {
     // Process 512-bit chunks
     uint8_t chunk[64];
     memset(chunk, 0, sizeof(chunk));
+    
+    short done = 0;
 
-    while (size > 0) {
+    while (!done) {
 
         int n = size < 64 ? size : 64;
         memcpy(chunk, data, n);
@@ -39,6 +41,7 @@ int main(int argc, char** argv) {
             for (int i=n+1; i<64; ++i) {
                 chunk[i] = 0b00000000;
             }
+            done = 1;
         }
 
         printf("\n");
@@ -52,6 +55,7 @@ int main(int argc, char** argv) {
 
         size -= n;
     }
+
 
     // Final hash
     printf("\n");
