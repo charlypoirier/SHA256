@@ -34,14 +34,22 @@ int main(int argc, char** argv) {
         int n = size < 64 ? size : 64;
         memcpy(chunk, data, n);
         data = data + n;
-
-        // Padding
+        
         if (n < 64) {
             chunk[n] = 0b10000000;
-            for (int i=n+1; i<64; ++i) {
+            for (int i=n+1; i<56; ++i) {
                 chunk[i] = 0b00000000;
             }
-            done = 1;
+            if (n < 56) {
+                for (int i=63; i>55; --i, totalSize >>= 8) {
+                    chunk[i] = totalSize & 0b11111111;
+                }
+                done = 1;
+            } else {
+                for (int i=56; i<64; ++i) {
+                    chunk[i] = 0b00000000;
+                }
+            }
         }
 
         printf("\n");
