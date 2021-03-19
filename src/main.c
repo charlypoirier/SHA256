@@ -4,9 +4,6 @@
 #include "functions.h"
 #include "constants.h"
 
-/**
- * See https://en.wikipedia.org/wiki/SHA-2
- */
 int main(int argc, char** argv) {
     
     if (argc == 1) {
