@@ -29,28 +29,33 @@ int main(int argc, char** argv) {
     // Process 512-bit chunks
     uint8_t chunk[64];
     memset(chunk, 0, sizeof(chunk));
-    int done = 0;
+    int oneDone = 0, sizeDone = 0;
 
-    while (!done) {
+    while (!sizeDone) {
 
         int n = size < 64 ? size : 64;
         memcpy(chunk, data, n);
         data = data + n;
-        
-        if (n < 64) {
-            chunk[n] = 0b10000000;
-            for (int i=n+1; i<56; ++i) {
+        size -= n;
+
+        // Padding
+        if (size == 0 && n < 64) {
+            if (!oneDone) {
+                chunk[n] = 0b10000000;
+                oneDone = 1;
+            } else {
+                chunk[n] = 0b00000000;
+            }
+
+            for (int i = n+1; i<64; ++i) {
                 chunk[i] = 0b00000000;
             }
+
             if (n < 56) {
                 for (int i=63; i>55; --i, totalSize >>= 8) {
                     chunk[i] = totalSize & 0b11111111;
                 }
-                done = 1;
-            } else {
-                for (int i=56; i<64; ++i) {
-                    chunk[i] = 0b00000000;
-                }
+                sizeDone = 1;
             }
         }
 
@@ -94,8 +99,6 @@ int main(int argc, char** argv) {
         H[5] += f;
         H[6] += g;
         H[7] += h;
-
-        size -= n;
     }
 
     // Final hash
