@@ -17,10 +17,10 @@ int main(int argc, char** argv) {
     // Input data
     uint8_t* data = (uint8_t*)argv[1];
     uint64_t size = strlen(argv[1]);
-    uint64_t totalSize = size;
+    uint64_t totalSize = size * 8;
 
-    // Current hash values
-    uint32_t h[] = { 0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
+    // Initial hash values
+    uint32_t H[] = { 0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
         0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19 };
 
     // Message schedule
@@ -60,30 +60,47 @@ int main(int argc, char** argv) {
         }
 
         for (int i=16; i<64; ++i) {
-            W[i] = s1(W[i-2]) + W[i-7] + s0(W[i-15]) + W[i-16];
+            W[i] = W[i-16] + s0(W[i-15]) + W[i-7] + s1(W[i-2]);
         }
 
         // Compression
+        uint32_t a = H[0];
+        uint32_t b = H[1];
+        uint32_t c = H[2];
+        uint32_t d = H[3];
+        uint32_t e = H[4];
+        uint32_t f = H[5];
+        uint32_t g = H[6];
+        uint32_t h = H[7];
+
         for (int i=0; i<64; ++i) {
-            uint32_t T1 = S1(h[4]) + choice(h[4], h[5], h[6]) + h[7] + K[i] + W[i];
-            uint32_t T2 = S0(h[0]) + majority(h[0], h[1], h[2]);
-            for (int j=7; j>0; --j) {
-                h[j] = h[j-1];
-            }
-            h[0] = T1 + T2;
-            h[4] += T1;
+            uint32_t T1 = S1(e) + choice(e, f, g) + h + K[i] + W[i];
+            uint32_t T2 = S0(a) + majority(a, b, c);
+            h = g;
+            g = f;
+            f = e;
+            e = d + T1;
+            d = c;
+            c = b;
+            b = a;
+            a = T1 + T2;
         }
 
-        for (int i=0; i<7; ++i) {
-            h[i] += H[i];
-        }
+        H[0] += a;
+        H[1] += b;
+        H[2] += c;
+        H[3] += d;
+        H[4] += e;
+        H[5] += f;
+        H[6] += g;
+        H[7] += h;
 
         size -= n;
     }
 
     // Final hash
     for (int i=0; i<8; ++i) {
-        printf("%08x", h[i]);
+        printf("%08x", H[i]);
 	}
     printf("\n");
     
