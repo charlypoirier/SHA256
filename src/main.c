@@ -6,14 +6,28 @@
 
 int main(int argc, char** argv) {
     
-    if (argc == 1) {
-        printf("Usage: ./sha256 <input>\n");
+    if (argc != 2) {
+        printf("Usage: ./sha256 <file>\n");
+        return EXIT_FAILURE;
+    }
+    
+    // Read input file
+    FILE* file;
+    uint8_t* data;
+    uint64_t size;
+    
+    if ((file = fopen(argv[1], "r"))) {
+        fseek(file, 0, SEEK_END);
+        size = ftell(file);
+        rewind(file);
+        data = malloc(size * sizeof(char));
+        fread(data, size, 1, file);
+        fclose(file);
+    } else {
+        printf("%s: %s: No such file or directory\n", argv[0], argv[1]);
         return EXIT_FAILURE;
     }
 
-    // Input data
-    uint8_t* data = (uint8_t*)argv[1];
-    uint64_t size = strlen(argv[1]);
     uint64_t totalSize = size * 8;
 
     // Initial hash values
@@ -26,13 +40,14 @@ int main(int argc, char** argv) {
     // Process 512-bit chunks
     uint8_t chunk[64];
     memset(chunk, 0, sizeof(chunk));
+    uint8_t* dataptr = data;
     int oneDone = 0, sizeDone = 0;
 
     while (!sizeDone) {
 
         int n = size < 64 ? size : 64;
-        memcpy(chunk, data, n);
-        data = data + n;
+        memcpy(chunk, dataptr, n);
+        dataptr += n;
         size -= n;
 
         // Padding
@@ -98,11 +113,13 @@ int main(int argc, char** argv) {
         H[7] += h;
     }
 
+    free(data);
+
     // Final hash
     for (int i=0; i<8; ++i) {
         printf("%08x", H[i]);
 	}
     printf("\n");
-    
+
     return EXIT_SUCCESS;
 }
